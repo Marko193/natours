@@ -1,6 +1,11 @@
 const fs = require('fs');
 const express = require('express');
+
 const app = express();
+
+//middleware - a f() that can modify the incoming request data
+//it stands in the middle (between) of the req and response
+app.use(express.json());
 
 //The route - specify the root url & HTTP Get method
 //The SEND method
@@ -19,7 +24,7 @@ app.post('/', (req, res) => {
 */
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours.json`));
 
-//get a data from JSON file with GET request
+//GET ALL TOURS from JSON file with GET request 
 app.get('/api/v1/tours', (req, res) => {
     res.status(200).json({
         status: 'success',
@@ -27,6 +32,29 @@ app.get('/api/v1/tours', (req, res) => {
         data: {
             tours: tours
         }
+    });
+});
+
+//init a POST method - CREATE A NEW TOUR
+//use migddleware - init it higher
+app.post('/api/v1/tours', (req, res) => {
+    // console.log(req.body);
+    const newId = tours[tours.length - 1].id + 1;
+    //create a new obj by merg 2 exist objects
+    const newTour = Object.assign({ id: newId }, req.body);
+
+    //add to array new tour with new id
+    tours.push(newTour);
+
+    //push in file, before already converted into the JSON obj
+    fs.writeFile(`${__dirname}/dev-data/data/tours.json`, JSON.stringify(tours), err => {
+        //created recording in JSON file
+        res.status(201).json({
+            //status: 'success',
+            data: {
+                tour: newTour
+            }
+        });
     });
 });
 

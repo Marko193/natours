@@ -6,26 +6,10 @@ const app = express();
 //middleware - a f() that can modify the incoming request data
 //it stands in the middle (between) of the req and response
 app.use(express.json());
-
-//The route - specify the root url & HTTP Get method
-//The SEND method
-/*
-app.get('/', (req, res) => {
-    //get a quick answer from the server
-    res.status(200)
-    //send a json object as an answer
-    .json({message: 'Hello from the server side!', app: 'Natours'});
-});
-
-//the POST method
-app.post('/', (req, res) => {
-    res.send('Your can post to this endpoint...');
-})
-*/
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
 
 //GET ALL TOURS from JSON file with GET request 
-app.get('/api/v1/tours', (req, res) => {
+const getAllTours = (req, res) => {
     res.status(200).json({
         status: 'success',
         results: tours.length,
@@ -33,14 +17,11 @@ app.get('/api/v1/tours', (req, res) => {
             tours: tours
         }
     });
-});
+};
 
 //get the tour with the specific ID
-app.get('/api/v1/tours/:id', (req, res) => {
+const getTour = (req, res) => {
     //method in JS which find elem in arr
-    // console.log(req.params.id);
-    //tour.toString();
-    //console.log(tour);
 
     console.log(req.params);
     const id = req.params.id * 1; //convert str to num 
@@ -60,11 +41,11 @@ app.get('/api/v1/tours/:id', (req, res) => {
             tour //didn`t show the tour with id
         }
     });
-});
+};
 
 //init a POST method - CREATE A NEW TOUR
 //use migddleware - init it higher
-app.post('/api/v1/tours', (req, res) => {
+const createTour = (req, res) => {
     // console.log(req.body);
     const newId = tours[tours.length - 1].id + 1;
     //create a new obj by merg 2 exist objects
@@ -74,7 +55,7 @@ app.post('/api/v1/tours', (req, res) => {
     tours.push(newTour);
 
     //push in file, before already converted into the JSON obj
-    fs.writeFile(`${__dirname}/dev-data/data/tours.json`, JSON.stringify(tours), err => {
+    fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
         //created recording in JSON file
         res.status(201).json({
             //status: 'success',
@@ -83,10 +64,10 @@ app.post('/api/v1/tours', (req, res) => {
             }
         });
     });
-});
+};
 
 //A tested Version of update file (didn`t work)
-app.patch('/api/v1/tours/:id', (req, res) => {
+const updateTour = (req, res) => {
     if (req.params.id > tours.length) {
         return res.status(404).json({
             status: 'fail',
@@ -100,10 +81,10 @@ app.patch('/api/v1/tours/:id', (req, res) => {
             tour: '<Updated tour here>'
         }
     });
-});
+};
 
 //A tested Version of delete file (didn`t work)
-app.delete('/api/v1/tours/:id', (req, res) => {
+const deleteTour = (req, res) => {
     if (req.params.id > tours.length) {
         return res.status(404).json({
             status: 'fail',
@@ -116,7 +97,26 @@ app.delete('/api/v1/tours/:id', (req, res) => {
         status: 'success',
         data: null
     });
-});
+};
+
+//1 app.get('/api/v1/tours', getAllTours);
+//2 app.get('/api/v1/tours/:id', getTour);
+//3 app.post('/api/v1/tours', createTour);
+//4 app.patch('/api/v1/tours/:id', updateTour);
+//5 app.delete('/api/v1/tours/:id', deleteTour);
+
+//Equal to 1 & 3
+app
+    .route('/api/v1/tours')
+    .get(getAllTours)
+    .post(createTour);
+
+//Equal to 2, 4 & 5
+app
+    .route('/api/v1/tours/:id')
+    .get(getTour)
+    .patch(updateTour)
+    .delete(deleteTour);
 
 //Init the port for running our app
 const port = 3000;

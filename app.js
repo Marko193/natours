@@ -85,6 +85,7 @@ app.post('/api/v1/tours', (req, res) => {
     });
 });
 
+//A tested Version of update file (didn`t work)
 app.patch('/api/v1/tours/:id', (req, res) => {
     if (req.params.id > tours.length) {
         return res.status(404).json({
@@ -98,6 +99,22 @@ app.patch('/api/v1/tours/:id', (req, res) => {
         data: {
             tour: '<Updated tour here>'
         }
+    });
+});
+
+//A tested Version of delete file (didn`t work)
+app.delete('/api/v1/tours/:id', (req, res) => {
+    if (req.params.id > tours.length) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID'
+        });
+    }
+
+    //204 - no content
+    res.status(204).json({
+        status: 'success',
+        data: null
     });
 });
 

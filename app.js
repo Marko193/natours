@@ -35,6 +35,33 @@ app.get('/api/v1/tours', (req, res) => {
     });
 });
 
+//get the tour with the specific ID
+app.get('/api/v1/tours/:id', (req, res) => {
+    //method in JS which find elem in arr
+   // console.log(req.params.id);
+    //tour.toString();
+    //console.log(tour);
+
+    console.log(req.params);
+    const id = req.params.id * 1; //convert str to num 
+    const tour = tours.find(el => el.id === id);
+
+    //if(id > tours.length) {
+    if(id > tours.length) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID'
+        });
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+           tour //didn`t show the tour with id
+        }
+    });
+});
+
 //init a POST method - CREATE A NEW TOUR
 //use migddleware - init it higher
 app.post('/api/v1/tours', (req, res) => {
@@ -57,6 +84,8 @@ app.post('/api/v1/tours', (req, res) => {
         });
     });
 });
+
+
 
 //Init the port for running our app
 const port = 3000;

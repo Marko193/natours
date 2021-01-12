@@ -1,12 +1,24 @@
 const fs = require('fs');
 const express = require('express');
 
-const app = express();
-
 //middleware - a f() that can modify the incoming request data
 //it stands in the middle (between) of the req and response
+//.use method - for middleware
+const app = express();
 app.use(express.json());
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
+
+//our own middleware f()
+//next arg - Express knows that we define middleware f()
+//MUST Call next() - without it we`ll stuck
+//won`t be able to move & to send res to the client
+app.use((req, res, next) => {
+    console.log('Hello from the middleware!');
+    next();
+});
+
+const tours = JSON.parse(
+    fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
+);
 
 //GET ALL TOURS from JSON file with GET request 
 const getAllTours = (req, res) => {

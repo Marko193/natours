@@ -22,7 +22,7 @@ app.post('/', (req, res) => {
     res.send('Your can post to this endpoint...');
 })
 */
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours.json`));
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
 
 //GET ALL TOURS from JSON file with GET request 
 app.get('/api/v1/tours', (req, res) => {
@@ -38,7 +38,7 @@ app.get('/api/v1/tours', (req, res) => {
 //get the tour with the specific ID
 app.get('/api/v1/tours/:id', (req, res) => {
     //method in JS which find elem in arr
-   // console.log(req.params.id);
+    // console.log(req.params.id);
     //tour.toString();
     //console.log(tour);
 
@@ -47,7 +47,7 @@ app.get('/api/v1/tours/:id', (req, res) => {
     const tour = tours.find(el => el.id === id);
 
     //if(id > tours.length) {
-    if(id > tours.length) {
+    if (id > tours.length) {
         return res.status(404).json({
             status: 'fail',
             message: 'Invalid ID'
@@ -57,7 +57,7 @@ app.get('/api/v1/tours/:id', (req, res) => {
     res.status(200).json({
         status: 'success',
         data: {
-           tour //didn`t show the tour with id
+            tour //didn`t show the tour with id
         }
     });
 });
@@ -85,7 +85,21 @@ app.post('/api/v1/tours', (req, res) => {
     });
 });
 
+app.patch('/api/v1/tours/:id', (req, res) => {
+    if (req.params.id > tours.length) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID'
+        });
+    }
 
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour: '<Updated tour here>'
+        }
+    });
+});
 
 //Init the port for running our app
 const port = 3000;

@@ -125,11 +125,42 @@ const deleteTour = (req, res) => {
     });
 };
 
-//1 app.get('/api/v1/tours', getAllTours);
-//2 app.get('/api/v1/tours/:id', getTour);
-//3 app.post('/api/v1/tours', createTour);
-//4 app.patch('/api/v1/tours/:id', updateTour);
-//5 app.delete('/api/v1/tours/:id', deleteTour);
+//USERS ROUTES
+
+const getAllUsers = (req, res) => {
+    res.status(500).json({
+        status: 'error',
+        message: 'this route isn`t implem yet!'
+    });
+};
+
+const createUser = (req, res) => {
+    res.status(500).json({
+        status: 'error',
+        message: 'this route isn`t implem yet!'
+    });
+};
+
+const getUser = (req, res) => {
+    res.status(500).json({
+        status: 'error',
+        message: 'this route isn`t implem yet!'
+    });
+};
+
+const updateUser = (req, res) => {
+    res.status(500).json({
+        status: 'error',
+        message: 'this route isn`t implem yet!'
+    });
+};
+
+const deleteUser = (req, res) => {
+    res.status(500).json({
+        status: 'error',
+        message: 'this route isn`t implem yet!'
+    });
+};
 
 //3. ROUTES
 //Equal to 1 & 3
@@ -144,6 +175,18 @@ app
     .get(getTour)
     .patch(updateTour)
     .delete(deleteTour);
+
+//USERS
+app
+    .route('/api/v1/users')
+    .get(getAllUsers)
+    .post(createUser);
+
+app
+    .route('/api/v1/users/:id')
+    .get(getUser)
+    .patch(updateUser)
+    .delete(deleteUser);
 
 //4. START THE SERVER
 const port = 3000;

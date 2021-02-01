@@ -12,8 +12,12 @@ const app = express();
 //1. Middlewares
 //get the info about req
 app.use(morgan('dev'));
-
 app.use(express.json());
+
+//serve static files FROM FOLDER - get access to overview.html
+//look in public folder by default
+//http://localhost:3000/overview.html
+app.use(express.static(`${__dirname}/public`))
 
 //our own middleware f()
 //next arg - Express knows that we define middleware f()

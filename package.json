@@ -1,24 +1,24 @@
 {
-  "name": "natours",
-  "version": "1.0.0",
-  "description": "Learning Node.js, Express & MongoDB",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Marko193/natours.git"
-  },
-  "author": "Marko Pavlenko",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Marko193/natours/issues"
-  },
-  "homepage": "https://github.com/Marko193/natours#readme",
-  "dependencies": {
-    "express": "^4.17.1",
-    "morgan": "^1.10.0",
-    "package-lock.json": "^1.0.0"
-  }
+    "name": "natours",
+    "version": "1.0.0",
+    "description": "Learning Node.js, Express & MongoDB",
+    "main": "app.js",
+    "scripts": {
+        "start": "nodemon server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Marko193/natours.git"
+    },
+    "author": "Marko Pavlenko",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Marko193/natours/issues"
+    },
+    "homepage": "https://github.com/Marko193/natours#readme",
+    "dependencies": {
+        "express": "^4.17.1",
+        "morgan": "^1.10.0",
+        "package-lock.json": "^1.0.0"
+    }
 }

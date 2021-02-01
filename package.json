@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Marko193/natours#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "morgan": "^1.10.0",
     "package-lock.json": "^1.0.0"
   }
 }

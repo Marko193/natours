@@ -1,6 +1,11 @@
 const express = require('express');
 const tourController = require('./../controllers/tourController');
+
 const router = express.Router();
+
+//param middleware - connect to tourController
+//to check on the cor val of ID
+router.param('id', tourController.checkID);
 
 router
     .route('/')

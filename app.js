@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === 'development') {
 //look in public folder by default
 //http://localhost:3000/overview.html
 app.use(express.json());
-app.use(express.static(`${__dirname}/public`))
+app.use(express.static(`${__dirname}/public`));
 
 //our own middleware f()
 //next arg - Express knows that we define middleware f()

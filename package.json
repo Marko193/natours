@@ -4,7 +4,7 @@
     "description": "Learning Node.js, Express & MongoDB",
     "main": "app.js",
     "scripts": {
-        "start": "nodemon server.js"
+        "start:dev": "nodemon server.js"
     },
     "repository": {
         "type": "git",
@@ -17,6 +17,7 @@
     },
     "homepage": "https://github.com/Marko193/natours#readme",
     "dependencies": {
+        "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "morgan": "^1.10.0",
         "package-lock.json": "^1.0.0"

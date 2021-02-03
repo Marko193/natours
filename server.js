@@ -34,12 +34,30 @@ const tourSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: [true, 'A tour must have a price!']
+        required: [true, 'A tour must have a price!'] //a validator
     }
 });
 
 //Create a Model by this Schema
 const Tour = mongoose.model('Tour', tourSchema);
+
+//we want to add into db such object
+const testTour = new Tour({
+    name: 'The Camper',
+    rating: 4.3,
+    price: 860
+});
+
+//save to the tour collect & DB
+//auto create collection & write data into it
+testTour
+    .save()
+    .then(doc => {
+        console.log('Successfully added to DB: ', doc);
+    })
+    .catch(err => {
+        console.log('Error: ', err);
+    });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

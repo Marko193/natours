@@ -5,7 +5,7 @@ const router = express.Router();
 
 //param middleware - connect to tourController
 //to check on the cor val of ID
-router.param('id', tourController.checkID);
+// router.param('id', tourController.checkID);
 
 //Create a checkBody middleware
 //Check if body contains the name and price property

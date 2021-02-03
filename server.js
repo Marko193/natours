@@ -19,45 +19,23 @@ mongoose
         console.log('DB Connection successfully!');
     })
 
-//A simple Tour Schema - desc our data
-//we have a name & a datatype
-//specify the schema and doing the validation
-const tourSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, 'A tour must have a name'], //a validator
-        unique: true
-    },
-    rating: {
-        type: Number,
-        default: 4.5
-    },
-    price: {
-        type: Number,
-        required: [true, 'A tour must have a price!'] //a validator
-    }
-});
+// //we want to add into db such object
+// const testTour = new Tour({
+//     name: 'The Camper',
+//     rating: 4.3,
+//     price: 860
+// });
 
-//Create a Model by this Schema
-const Tour = mongoose.model('Tour', tourSchema);
-
-//we want to add into db such object
-const testTour = new Tour({
-    name: 'The Camper',
-    rating: 4.3,
-    price: 860
-});
-
-//save to the tour collect & DB
-//auto create collection & write data into it
-testTour
-    .save()
-    .then(doc => {
-        console.log('Successfully added to DB: ', doc);
-    })
-    .catch(err => {
-        console.log('Error: ', err);
-    });
+// //save to the tour collect & DB
+// //auto create collection & write data into it
+// testTour
+//     .save()
+//     .then(doc => {
+//         console.log('Successfully added to DB: ', doc);
+//     })
+//     .catch(err => {
+//         console.log('Error: ', err);
+//     });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

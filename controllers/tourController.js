@@ -32,30 +32,43 @@ const Tour = require('./../models/tourModel');
 //     next();
 // };
 
-exports.getAllTours = (req, res) => {
-    console.log(req.requestTime);
-    res.status(200).json({
-        status: 'success',
-        requestedAt: req.requestTime,
-        // results: tours.length,
-        // data: {
-        //     tours: tours
-        // }
-    });
+exports.getAllTours = async(req, res) => {
+    try {
+        const tours = await Tour.find();
+
+        res.status(200).json({
+            status: 'success',
+            results: tours.length,
+            data: {
+                tours: tours
+            }
+        });
+    } catch (err) {
+        res.status(404).json({
+            status: 'Fail!',
+            message: err
+        })
+    }
+
 };
 
 //get the tour with the specific ID
-exports.getTour = (req, res) => {
-    console.log(req.params);
-    const id = req.params.id * 1; //convert str to num 
-
-    // const tour = tours.find(el => el.id === id);
-    // res.status(200).json({
-    //     status: 'success',
-    //     data: {
-    //         tour //didn`t show the tour with id
-    //     }
-    // });
+exports.getTour = async(req, res) => {
+    try {
+        const tour = await Tour.findById(req.params.id);
+        //Tour.findOne({_id: req.params.id})
+        res.status(200).json({
+            status: 'success',
+            data: {
+                tour //didn`t show the tour with id
+            }
+        });
+    } catch (err) {
+        res.status(404).json({
+            status: 'Fail!',
+            message: err
+        })
+    }
 };
 
 //init a POST method - CREATE A NEW TOUR

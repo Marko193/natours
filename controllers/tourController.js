@@ -1,41 +1,8 @@
-//const fs = require('fs');
 const Tour = require('./../models/tourModel');
-
-// Import data from JSON file, not DB 
-// const tours = JSON.parse(
-//     fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-// );
-
-//param middleware - to check id
-//it`s called inside of each tour controller
-//middleware stack - pipeline
-// exports.checkID = (req, res, next, val) => {
-//     console.log(`Tour id is: ${val}`);
-//     //method in JS which find elem in arr
-//     if (req.params.id > tours.length) {
-//         return res.status(404).json({
-//             status: 'fail',
-//             message: 'Invalid ID'
-//         });
-//     }
-//     next();
-// }
-
-//param middleware for checking createTour F()
-// exports.checkBody = (req, res, next) => {
-//     if (!req.body.name || !req.body.price) {
-//         return res.status(400).json({
-//             status: 'fail',
-//             message: 'missing name or price'
-//         });
-//     }
-//     next();
-// };
 
 exports.getAllTours = async(req, res) => {
     try {
         const tours = await Tour.find();
-
         res.status(200).json({
             status: 'success',
             results: tours.length,
@@ -49,7 +16,6 @@ exports.getAllTours = async(req, res) => {
             message: err
         })
     }
-
 };
 
 //get the tour with the specific ID
@@ -97,14 +63,25 @@ exports.createTour = async(req, res) => {
 };
 
 //A tested Version of update file (didn`t work)
-exports.updateTour = (req, res) => {
+exports.updateTour = async(req, res) => {
+    try {
+        const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+            new: true, //send back to the client the updated doc
+            runValidators: true
+        });
 
-    res.status(200).json({
-        status: 'success',
-        data: {
-            tour: '<Updated tour here>'
-        }
-    });
+        res.status(200).json({
+            status: 'success',
+            data: {
+                tour: tour
+            }
+        });
+    } catch (err) {
+        res.status(404).json({
+            status: 'Fail!',
+            message: err
+        });
+    }
 };
 
 //A tested Version of delete file (didn`t work)

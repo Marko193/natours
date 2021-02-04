@@ -62,7 +62,7 @@ exports.createTour = async(req, res) => {
     }
 };
 
-//A tested Version of update file (didn`t work)
+//update tour
 exports.updateTour = async(req, res) => {
     try {
         const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
@@ -84,11 +84,40 @@ exports.updateTour = async(req, res) => {
     }
 };
 
-//A tested Version of delete file (didn`t work)
-exports.deleteTour = (req, res) => {
-    //204 - no content
-    res.status(204).json({
-        status: 'success',
-        data: null
-    });
+//delete tour 
+exports.deleteTour = async(req, res) => {
+    try {
+        await Tour.findByIdAndDelete(req.params.id, req.body);
+        res.status(200).json({
+            status: 'success',
+            data: null
+        });
+    } catch (err) {
+        res.status(404).json({
+            status: 'Fail!',
+            message: err
+        });
+    }
 };
+
+/*
+//A tested Version of delete file (didn`t work)
+exports.deleteTour = async(req, res) => {
+    try {
+        const tour = await Tour.findByIdAndDelete(req.params.id, req.body, {
+            new: true, //send back to the client the updated doc
+            runValidators: true
+        });
+
+        res.status(204).json({
+            status: 'success',
+            data: tour
+        });
+    } catch (err) {
+        res.status(404).json({
+            status: 'This document doesn`t exist!',
+            message: err
+        });
+    }
+};
+*/

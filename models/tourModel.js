@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+
 //A simple Tour Schema - desc our data
-//we have a name & a datatype
-//specify the schema and doing the validation
+//we have dif datatypes
+//specify the data fields which will be added and doing the validation
 const tourSchema = new mongoose.Schema({
     name: {
         type: String,

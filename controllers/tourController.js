@@ -2,13 +2,31 @@ const Tour = require('./../models/tourModel');
 
 exports.getAllTours = async(req, res) => {
     try {
+        console.log(req.query);
+
         //BUILD QUERY
+        //1. Filtering
         const queryObj = {...req.query };
         const excludedFields = ['page', 'sort', 'limit', 'fields'];
         excludedFields.forEach(el => delete queryObj[el]);
 
-        //first way of filtering
-        const query = Tour.find(queryObj);
+        //2) Advanced filtering
+        let queryStr = JSON.stringify(queryObj);
+        //regular expression
+        //filter for one of this val for several times
+        //127.0.0.1:3000/api/v1/tours?duration[gte]=5&difficulty=easy&price[lt]=1500
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+        console.log(JSON.parse(queryStr));
+
+
+        //filter object for the query
+        //{ difficulty: 'easy', duration: {$gte: 5} }
+        //{ difficulty: 'easy', duration: { gte: '5' } }
+        // gte, gt, lte, lt
+
+        const query = Tour.find(JSON.parse(queryStr));
+        //Execute query
+        const tours = await query;
 
         //the second way of filter - like SQL query
         // const query = Tour.find()
@@ -16,9 +34,6 @@ exports.getAllTours = async(req, res) => {
         //     .equals(5)
         //     .where("difficulty")
         //     .equals('easy');
-
-        //Execute query
-        const tours = await query;
 
         //SEND RESPONSE
         res.status(200).json({

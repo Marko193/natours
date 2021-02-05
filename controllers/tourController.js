@@ -1,3 +1,4 @@
+const { Query } = require('mongoose');
 const Tour = require('./../models/tourModel');
 
 exports.getAllTours = async(req, res) => {
@@ -5,18 +6,18 @@ exports.getAllTours = async(req, res) => {
         console.log(req.query);
 
         //BUILD QUERY
-        //1. Filtering
+        //1A. Filtering
         const queryObj = {...req.query };
         const excludedFields = ['page', 'sort', 'limit', 'fields'];
         excludedFields.forEach(el => delete queryObj[el]);
 
-        //2) Advanced filtering
+        //1B) Advanced filtering
         let queryStr = JSON.stringify(queryObj);
         //regular expression
         //filter for one of this val for several times
         //127.0.0.1:3000/api/v1/tours?duration[gte]=5&difficulty=easy&price[lt]=1500
         queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
-        console.log(JSON.parse(queryStr));
+        //console.log(JSON.parse(queryStr));
 
 
         //filter object for the query
@@ -24,7 +25,20 @@ exports.getAllTours = async(req, res) => {
         //{ difficulty: 'easy', duration: { gte: '5' } }
         // gte, gt, lte, lt
 
-        const query = Tour.find(JSON.parse(queryStr));
+        let query = Tour.find(JSON.parse(queryStr));
+
+        //2. Sorting (by price, duration)
+        //can sort from less to bigger and opposite (price /-price)
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' ');
+            //console.log(sortBy);
+            query = query.sort(sortBy);
+            //sort('price' ratingsAverage)
+        } else {
+            //default - from newest till oldest
+            query = query.sort('-createdAt');
+        }
+
         //Execute query
         const tours = await query;
 

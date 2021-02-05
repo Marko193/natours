@@ -120,7 +120,7 @@ exports.deleteTour = async(req, res) => {
 };
 
 //get the statistics about the different tours
-//using Aggregation Pipeline Operators
+//Using Aggregation Pipeline Operators 
 exports.getTourStats = async(req, res) => {
     try {
         const stats = await Tour.aggregate([{

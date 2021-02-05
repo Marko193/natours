@@ -119,24 +119,51 @@ exports.deleteTour = async(req, res) => {
     }
 };
 
-/*
-//A tested Version of delete file (didn`t work)
-exports.deleteTour = async(req, res) => {
+//get the statistics about the different tours
+//using Aggregation Pipeline Operators
+exports.getTourStats = async(req, res) => {
     try {
-        const tour = await Tour.findByIdAndDelete(req.params.id, req.body, {
-            new: true, //send back to the client the updated doc
-            runValidators: true
+        const stats = await Tour.aggregate([{
+                $match: {
+                    ratingsAverage: { $gte: 4.5 }
+                }
+            },
+            {
+                //group docs together using accumulators
+                $group: {
+                    //match tours by difficulty on 3 groups
+                    _id: { $toUpper: '$difficulty' },
+                    numTours: { $sum: 1 },
+                    numRatings: { $sum: '$ratingsQuantity' },
+                    avgRating: { $avg: '$ratingsAverage' },
+                    avgPrice: { $avg: '$price' },
+                    minPrice: { $min: '$price' },
+                    maxPrice: { $min: '$price' },
+                }
+            },
+            {
+                //sort every cat by average price
+                $sort: { avgPrice: 1 }
+            },
+            // {
+            //     $match: {
+            //         //not equal to ...
+            //         _id: { $ne: 'EASY' }
+            //     }
+            // }
+        ]);
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                stats
+            }
         });
 
-        res.status(204).json({
-            status: 'success',
-            data: tour
-        });
     } catch (err) {
         res.status(404).json({
-            status: 'This document doesn`t exist!',
+            status: 'Fail!',
             message: err
         });
     }
-};
-*/
+}

@@ -51,7 +51,8 @@ const tourSchema = new mongoose.Schema({
     images: [String],
     createdAt: { //the time, when the tour was created
         type: Date,
-        default: Date.now()
+        default: Date.now(),
+        select: false
     },
     startDates: [Date] //not auto add it to arr, but parse str to date-time
 });

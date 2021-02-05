@@ -7,6 +7,11 @@ const router = express.Router();
 //to check on the cor val of ID
 // router.param('id', tourController.checkID);
 
+//Alias route - a template req that can be popular
+router
+    .route('/top-5-cheap')
+    .get(tourController.aliasTopTours, tourController.getAllTours);
+
 //Create a checkBody middleware
 //Check if body contains the name and price property
 //If not, send back 400 (bad request)

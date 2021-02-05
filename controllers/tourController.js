@@ -47,15 +47,21 @@ exports.getAllTours = async(req, res) => {
             query = query.select('-__v');
         }
 
-        //Execute query
-        const tours = await query;
+        //4. Pagination
+        //?page=2&limit=10, 1-10 for page 1, 11-20 for page 2
+        const page = req.query.page * 1 || 1; //convert str to num
+        const limit = req.query.limit * 1 || 100;
+        const skip = (page - 1) * limit;
 
-        //the second way of filter - like SQL query
-        // const query = Tour.find()
-        //     .where('duration')
-        //     .equals(5)
-        //     .where("difficulty")
-        //     .equals('easy');
+        query = query.skip(skip).limit(limit);
+
+        if (req.query.page) {
+            const numTours = await Tour.countDocuments();
+            if (skip >= numTours) throw new Error('This page doesn`t exist!');
+        }
+
+        //EXECUTE QUERY
+        const tours = await query;
 
         //SEND RESPONSE
         res.status(200).json({

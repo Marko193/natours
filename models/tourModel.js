@@ -55,6 +55,16 @@ const tourSchema = new mongoose.Schema({
         select: false
     },
     startDates: [Date] //not auto add it to arr, but parse str to date-time
+}, {
+    //for define the virtual propeties
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
+
+//virtual properties -add properties to object
+//without adding it to the MongoDB
+tourSchema.virtual('durationWeeks').get(function() {
+    return this.duration / 7;
 });
 
 //Create a Model by this Schema

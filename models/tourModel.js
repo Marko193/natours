@@ -107,7 +107,7 @@ tourSchema.pre(/^find/, function(next) {
 //post req with all info about not-secret tours
 tourSchema.post(/^find/, function(docs, next) {
     console.log(`Query took ${Date.now() - this.start} milliseconds`)
-    console.log(docs);
+        //console.log(docs);
     next();
 })
 
@@ -118,6 +118,19 @@ tourSchema.post(/^find/, function(docs, next) {
 //     next();
 // });
 
+//AGREGATION MIDDLEWARE
+//hide secretTour from tour-stat query
+tourSchema.pre('aggregate', function(next) {
+    this.pipeline().unshift({
+        $match: {
+            secretTour: {
+                $ne: true
+            }
+        }
+    })
+    console.log(this.pipeline());
+    next();
+})
 
 //Create a Model by this Schema
 const Tour = mongoose.model('Tour', tourSchema);

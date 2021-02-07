@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const validator = require('validator');
+
 
 //A Tour Schema - desc our data
 //we have dif datatypes
@@ -12,6 +14,8 @@ const tourSchema = new mongoose.Schema({
         unique: true,
         minlength: [10, 'A tour name must have more or equal than 10 symbols'],
         maxlength: [50, 'A tour name must have less or equal than 50 symbols']
+            //validator lib method - check if the string contains only letters (a-zA-Z).
+            // validate: [validator.isAlpha, 'Tour name must only contain characters!']
     },
     slug: String,
     duration: {
@@ -44,7 +48,18 @@ const tourSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'A tour must have a price!'] //a validator
     },
-    priceDiscount: Number,
+    //price discount = 100 < price 200
+    //function of validation
+    priceDiscount: {
+        type: Number,
+        validate: {
+            validator: function(value) {
+                //this only points to current doc on NEW document creation
+                return value < this.price;
+            },
+            message: 'Discount price ({VALUE}) should be below the regular price'
+        }
+    },
     summary: {
         type: String,
         trim: true, //only for str - remove all spaces in the beg and end

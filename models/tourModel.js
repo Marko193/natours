@@ -7,9 +7,11 @@ const slugify = require('slugify');
 const tourSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'A tour must have a name'], //a validator
+        required: [true, 'A tour must have a name'], //a built-in data-validator
         trim: true,
-        unique: true
+        unique: true,
+        minlength: [10, 'A tour name must have more or equal than 10 symbols'],
+        maxlength: [50, 'A tour name must have less or equal than 50 symbols']
     },
     slug: String,
     duration: {
@@ -22,11 +24,17 @@ const tourSchema = new mongoose.Schema({
     },
     difficulty: {
         type: String,
-        required: [true, ' A tour must have a difficulty']
+        required: [true, ' A tour must have a difficulty'],
+        emun: {
+            values: ['easy', 'medium', 'hard'],
+            message: 'Invalid value!'
+        }
     },
     ratingsAverage: {
         type: Number,
-        default: 4.5
+        default: 4.5,
+        min: [1, 'Rating must be more or equal to 1.0'],
+        max: [5, 'Rating must be more or equal to 5.0']
     },
     ratingsQuantity: {
         type: Number,
@@ -127,7 +135,7 @@ tourSchema.pre('aggregate', function(next) {
                 $ne: true
             }
         }
-    })
+    });
     console.log(this.pipeline());
     next();
 })

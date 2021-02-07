@@ -56,7 +56,11 @@ const tourSchema = new mongoose.Schema({
         default: Date.now(),
         select: false
     },
-    startDates: [Date] //not auto add it to arr, but parse str to date-time
+    startDates: [Date], //not auto add it to arr, but parse str to date-time
+    secretTour: {
+        type: Boolean,
+        default: false
+    }
 }, {
     //for define the virtual propeties
     toJSON: { virtuals: true },
@@ -79,6 +83,7 @@ tourSchema.pre('save', function(next) {
     //console.log(this);
 });
 
+//DOCUMENT MIDDLEWARE
 // tourSchema.pre('save', function(next) {
 //     console.log('Will save document...');
 //     next();
@@ -88,6 +93,31 @@ tourSchema.pre('save', function(next) {
 //     console.log(doc);
 //     next();
 // });
+
+//QUERY MIDDLEWARE
+//Secret tour field - secretTour: true - don`t appear in the PostMan
+//Hide ALL STRINGS, WHICH STARTS WITH FIND
+tourSchema.pre(/^find/, function(next) {
+    //tourSchema.pre('find', function(next) {
+    this.find({ secretTour: { $ne: true } });
+    this.start = Date.now();
+    next();
+});
+
+//post req with all info about not-secret tours
+tourSchema.post(/^find/, function(docs, next) {
+    console.log(`Query took ${Date.now() - this.start} milliseconds`)
+    console.log(docs);
+    next();
+})
+
+//Hide the SecretTour while searching by ID
+//without regular expressions
+// tourSchema.pre('findOne', function(next) {
+//     this.find({ secretTour: { $ne: true } });
+//     next();
+// });
+
 
 //Create a Model by this Schema
 const Tour = mongoose.model('Tour', tourSchema);

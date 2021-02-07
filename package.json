@@ -21,7 +21,8 @@
         "express": "^4.17.1",
         "mongoose": "^5.11.14",
         "morgan": "^1.10.0",
-        "package-lock.json": "^1.0.0"
+        "package-lock.json": "^1.0.0",
+        "slugify": "^1.4.6"
     },
     "devDependencies": {
         "eslint": "^7.19.0",

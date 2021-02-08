@@ -2,6 +2,7 @@ const { Query } = require('mongoose');
 const Tour = require('./../models/tourModel');
 const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
 //Implement the alias middleware f()
 exports.aliasTopTours = (req, res, next) => {
@@ -34,6 +35,11 @@ exports.getAllTours = catchAsync(async(req, res, next) => {
 exports.getTour = catchAsync(async(req, res, next) => {
     const tour = await Tour.findById(req.params.id);
 
+    //404 Not Found Errors
+    if (!tour) {
+        return next(new AppError('No tour found with such ID!', 404))
+    }
+
     res.status(200).json({
         status: 'success',
         data: {
@@ -60,6 +66,11 @@ exports.updateTour = catchAsync(async(req, res, next) => {
         runValidators: true
     });
 
+    //404 Not Found Errors
+    if (!tour) {
+        return next(new AppError('No tour found with such ID!', 404))
+    }
+
     res.status(200).json({
         status: 'success',
         data: {
@@ -70,7 +81,13 @@ exports.updateTour = catchAsync(async(req, res, next) => {
 
 //delete tour 
 exports.deleteTour = catchAsync(async(req, res, next) => {
-    await Tour.findByIdAndDelete(req.params.id, req.body);
+    const tour = await Tour.findByIdAndDelete(req.params.id, req.body);
+
+    //404 Not Found Errors
+    if (!tour) {
+        return next(new AppError('No tour found with such ID!', 404))
+    }
+
     res.status(200).json({
         status: 'success',
         data: null

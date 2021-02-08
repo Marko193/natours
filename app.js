@@ -26,10 +26,10 @@ app.use(express.static(`${__dirname}/public`));
 //next arg - Express knows that we define middleware f()
 //MUST Call next() - without it we`ll stuck
 //won`t be able to move & to send res to the client
-app.use((req, res, next) => {
-    console.log('Hello from the middleware!');
-    next();
-});
+// app.use((req, res, next) => {
+//     console.log('Hello from the middleware!');
+//     next();
+// });
 
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
@@ -41,5 +41,15 @@ app.use((req, res, next) => {
 //Can`t use before declaring
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+
+
+//for all others URL`s, which didn`t handle before
+//after all of the routes
+app.all('*', (req, res, next) => {
+    res.status(404).json({
+        status: 'Fail!',
+        message: `Can't find ${ req.originalUrl } on this server!`
+    })
+});
 
 module.exports = app;

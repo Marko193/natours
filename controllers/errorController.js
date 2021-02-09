@@ -7,7 +7,7 @@ const handleCastErrorDB = err => {
 };
 
 //take care about production mode
-const handleDuplicateFieldsDB = err => {
+const handleDuplicateFieldsDB = (err) => {
 
     const value = err.errmsg.match(/(["'])(?:(?=(\\?))\2.)*?\1/)[0];
     console.log(value);
@@ -16,7 +16,7 @@ const handleDuplicateFieldsDB = err => {
     return new AppError(message, 400);
 };
 
-const handleValidationErrorDB = err => {
+const handleValidationErrorDB = (err) => {
     const errors = Object.values(err.errors).map(el => el.message);
 
     const message = `Invalid input data. ${errors.join('. ')}`;

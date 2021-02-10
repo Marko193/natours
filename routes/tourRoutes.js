@@ -1,6 +1,6 @@
 const express = require('express');
-const tourController = require('./../controllers/tourController');
-
+const tourController = require('../controllers/tourController');
+const authController = require('../controllers/authController');
 const router = express.Router();
 
 //param middleware - connect to tourController
@@ -22,7 +22,7 @@ router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
 
 router
     .route('/')
-    .get(tourController.getAllTours)
+    .get(authController.protect, tourController.getAllTours)
     .post(tourController.createTour);
 
 //Equal to 2, 4 & 5

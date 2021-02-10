@@ -84,6 +84,9 @@ const tourSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
+    // first: {
+    //     type: String
+    // }
 }, {
     //for define the virtual propeties
     toJSON: { virtuals: true },

@@ -1,13 +1,22 @@
-const fs = require('fs');
+//const fs = require('fs');
+//const APIFeatures = require('./../utils/apiFeatures');
+const User = require('./../models/userModel');
+const catchAsync = require('./../utils/catchAsync');
 
 //USERS ROUTES
 
-exports.getAllUsers = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'this route isn`t implem yet!'
+exports.getAllUsers = catchAsync(async(req, res, next) => {
+    const users = await User.find();
+
+    //SEND RESPONSE
+    res.status(200).json({
+        status: 'success',
+        results: users.length,
+        data: {
+            users: users
+        }
     });
-};
+});
 
 exports.createUser = (req, res) => {
     res.status(500).json({

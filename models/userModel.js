@@ -25,7 +25,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please, create a password!'],
-        minlength: 5
+        minlength: 5,
+        select: false
     },
     passwordConfirm: {
         type: String,
@@ -40,7 +41,7 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-//Passwor encryptor
+//Password encryptor
 userSchema.pre('save', async function(next) {
     //Only run this f() if password was modified
     if (!this.isModified('password')) return next();
@@ -52,6 +53,11 @@ userSchema.pre('save', async function(next) {
     this.passwordConfirm = undefined;
     next();
 });
+
+//Checking password - compare encrypted password with non-encrypted
+userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 

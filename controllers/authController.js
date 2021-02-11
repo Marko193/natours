@@ -90,3 +90,14 @@ exports.protect = catchAsync(async(req, res, next) => {
     req.user = currentUser;
     next();
 });
+
+//Restriction of certain routes (deleting tours) for admins only
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        //roles - arr ['admin', 'lead-guide'].role='user'
+        if (!roles.includes(req.user.role)) {
+            return next(new AppError('You are not allowed to perform this action', 403));
+        }
+        next();
+    };
+};

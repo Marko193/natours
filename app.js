@@ -2,11 +2,14 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const expressMongoSanitize = require('express-mongo-sanitize');
 
 //middleware - a f() that can modify the incoming request data
 //it stands in the middle (between) of the req and response
@@ -32,23 +35,20 @@ const limiter = rateLimit({
 //for all of the roues, which starts with this URL
 app.use('/api', limiter);
 
-
 //BODY PARSER, reading data from the body into req.body
 //http://localhost:3000/overview.html
 app.use(express.json({
     limit: '10kb'
 }));
+
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+// Data sanitization against XSS
+app.use(xss());
+
 //SERVING STATIC FILES
 app.use(express.static(`${__dirname}/public`));
-
-//our own middleware f()
-//next arg - Express knows that we define middleware f()
-//MUST Call next() - without it we`ll stuck
-//won`t be able to move & to send res to the client
-// app.use((req, res, next) => {
-//     console.log('Hello from the middleware!');
-//     next();
-// });
 
 //Test middleware
 app.use((req, res, next) => {

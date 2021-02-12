@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -11,12 +12,22 @@ const userRouter = require('./routes/userRoutes');
 //.use method - for middleware
 const app = express();
 
-//1. Middlewares
+//1. GLOBAL MIDDLEWARES
 //get the info about req
 //console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+//allow the certain num or requets
+//100 req from the same ip from the same req in 1 hour
+const limiter = rateLimit({
+    max: 100,
+    windowMs: 60 * 60 * 1000,
+    message: 'Too many requests from this IP, please try again later!'
+});
+//for all of the roues, which starts with this URL
+app.use('/api', limiter);
 
 //serve static files FROM FOLDER - get access to overview.html
 //look in public folder by default

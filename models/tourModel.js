@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const User = require('./userModel');
 //const validator = require('validator');
 
 
@@ -105,7 +106,8 @@ const tourSchema = new mongoose.Schema({
         address: String,
         description: String,
         day: Number
-    }]
+    }],
+    guides: Array
 }, {
     //for define the virtual propeties
     toJSON: { virtuals: true },
@@ -128,16 +130,13 @@ tourSchema.pre('save', function(next) {
     //console.log(this);
 });
 
-//DOCUMENT MIDDLEWARE
-// tourSchema.pre('save', function(next) {
-//     console.log('Will save document...');
-//     next();
-// });
-
-// tourSchema.post('save', function(doc, next) {
-//     console.log(doc);
-//     next();
-// });
+//EMBEDDING
+//create a new doc - TOUR with users-guides by their ID`s
+tourSchema.pre('save', async function(next) {
+    const guidesPromises = this.guides.map(async id => await User.findById(id));
+    this.guides = await Promise.all(guidesPromises);
+    next();
+});
 
 //QUERY MIDDLEWARE
 //Secret tour field - secretTour: true - don`t appear in the PostMan

@@ -45,4 +45,9 @@ reviewSchema.pre(/^find/, function(next) {
 });
 
 const Review = mongoose.model('Review', reviewSchema);
+
 module.exports = Review;
+
+//GET /tourID/userID/reviews
+//GET /tourID/userID/reviews/7845kjh
+//POST /tourID/userID/reviews

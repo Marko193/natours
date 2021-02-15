@@ -2,7 +2,8 @@ const express = require('express');
 const reviewController = require('../controllers/reviewController');
 const authController = require('../controllers/authController');
 
-const router = express.Router();
+//all routes will be redirected to this routes just because this
+const router = express.Router({ mergeParams: true });
 
 //USERS
 router

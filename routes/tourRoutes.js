@@ -1,12 +1,17 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
+const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
 
 //param middleware - connect to tourController
 //to check on the cor val of ID
 // router.param('id', tourController.checkID);
+
+router.use('/:tourId/reviews', reviewRouter);
+
+
 
 //Alias route - a template req that can be popular
 router

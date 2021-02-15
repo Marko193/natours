@@ -10,7 +10,8 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
-const expressMongoSanitize = require('express-mongo-sanitize');
+const reviewRouter = require('./routes/reviewRoutes');
+//const expressMongoSanitize = require('express-mongo-sanitize');
 
 //middleware - a f() that can modify the incoming request data
 //it stands in the middle (between) of the req and response
@@ -76,6 +77,7 @@ app.use((req, res, next) => {
 //Can`t use before declaring
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 
 //for all others URL`s, which didn`t handle before

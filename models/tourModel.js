@@ -118,10 +118,18 @@ const tourSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 });
 
-//virtual properties -add properties to object
+//virtual populate - add properties to object
 //without adding it to the MongoDB
 tourSchema.virtual('durationWeeks').get(function() {
     return this.duration / 7;
+});
+
+//Virtual populate: tours and reviews
+//connect tours & reviews models together
+tourSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'tour',
+    localField: '_id'
 });
 
 //document middleware: runs before the .save() and .create()

@@ -5,6 +5,9 @@ const authController = require('../controllers/authController');
 //all routes will be redirected to this routes just because this
 const router = express.Router({ mergeParams: true });
 
+//no one can access to the routes below without auth
+router.use(authController.protect);
+
 //USERS
 router
     .route('/')
@@ -19,7 +22,7 @@ router
 router
     .route('/:id')
     .get(reviewController.getReview)
-    .patch(reviewController.updateReview)
-    .delete(reviewController.deleteReview);
+    .patch(authController.restrictTo('user', 'admin'), reviewController.updateReview)
+    .delete(authController.restrictTo('user', 'admin'), reviewController.deleteReview);
 
 module.exports = router;

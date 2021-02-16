@@ -79,11 +79,6 @@ exports.getUser = (req, res) => {
     });
 };
 
-exports.updateUser = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'this route isn`t implem yet!'
-    });
-};
-
+//ADMINS ONLY && NOT THE PASSWORD!
+exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);

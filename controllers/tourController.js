@@ -48,54 +48,10 @@ exports.getTour = catchAsync(async(req, res, next) => {
     });
 });
 
-exports.createTour = catchAsync(async(req, res, next) => {
-    const newTour = await Tour.create(req.body);
-
-    res.status(201).json({
-        status: 'success',
-        data: {
-            tour: newTour
-        }
-    });
-});
-
-//update tour
-exports.updateTour = catchAsync(async(req, res, next) => {
-    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-        new: true, //send back to the client the updated doc
-        runValidators: true
-    });
-
-    //404 Not Found Errors
-    if (!tour) {
-        return next(new AppError('No tour found with such ID!', 404))
-    }
-
-    res.status(200).json({
-        status: 'success',
-        data: {
-            tour: tour
-        }
-    });
-});
-
-//Ф-ция ЗАМЫКАНИЯ
+//Ф-ЦИИ ЗАМЫКАНИЯ
+exports.createTour = factory.createOne(Tour);
+exports.updateTour = factory.updateOne(Tour);
 exports.deleteTour = factory.deleteOne(Tour);
-
-//AНАЛОГИЧ ЗАМЫКАНИЯ
-// exports.deleteTour = catchAsync(async(req, res, next) => {
-//     const tour = await Tour.findByIdAndDelete(req.params.id, req.body);
-
-//     //404 Not Found Errors
-//     if (!tour) {
-//         return next(new AppError('No tour found with such ID!', 404))
-//     }
-
-//     res.status(200).json({
-//         status: 'success',
-//         data: null
-//     });
-// });
 
 //get the statistics about the different tours
 //Using Aggregation Pipeline Operators 

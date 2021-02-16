@@ -3,6 +3,7 @@
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 //USERS ROUTES
 
@@ -62,8 +63,6 @@ exports.deleteMe = catchAsync(async(req, res, next) => {
         status: 'success',
         data: null
     });
-
-
 });
 
 exports.createUser = (req, res) => {
@@ -87,9 +86,4 @@ exports.updateUser = (req, res) => {
     });
 };
 
-exports.deleteUser = (req, res) => {
-    res.status(500).json({
-        status: 'error',
-        message: 'this route isn`t implem yet!'
-    });
-};
+exports.deleteUser = factory.deleteOne(User);

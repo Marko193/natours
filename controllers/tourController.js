@@ -2,6 +2,7 @@ const Tour = require('../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const factory = require('./handlerFactory');
 
 //Implement the alias middleware f()
 exports.aliasTopTours = (req, res, next) => {
@@ -78,20 +79,23 @@ exports.updateTour = catchAsync(async(req, res, next) => {
     });
 });
 
-//delete tour 
-exports.deleteTour = catchAsync(async(req, res, next) => {
-    const tour = await Tour.findByIdAndDelete(req.params.id, req.body);
+//Ф-ция ЗАМЫКАНИЯ
+exports.deleteTour = factory.deleteOne(Tour);
 
-    //404 Not Found Errors
-    if (!tour) {
-        return next(new AppError('No tour found with such ID!', 404))
-    }
+//AНАЛОГИЧ ЗАМЫКАНИЯ
+// exports.deleteTour = catchAsync(async(req, res, next) => {
+//     const tour = await Tour.findByIdAndDelete(req.params.id, req.body);
 
-    res.status(200).json({
-        status: 'success',
-        data: null
-    });
-});
+//     //404 Not Found Errors
+//     if (!tour) {
+//         return next(new AppError('No tour found with such ID!', 404))
+//     }
+
+//     res.status(200).json({
+//         status: 'success',
+//         data: null
+//     });
+// });
 
 //get the statistics about the different tours
 //Using Aggregation Pipeline Operators 

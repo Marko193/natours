@@ -118,6 +118,11 @@ const tourSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 });
 
+//INDEXING - create Indexes in Tours table
+// tourSchema.index({ price: 1 });
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+
 //virtual populate - add properties to object
 //without adding it to the MongoDB
 tourSchema.virtual('durationWeeks').get(function() {

@@ -199,7 +199,7 @@ tourSchema.pre('aggregate', function(next) {
             }
         }
     });
-    console.log(this.pipeline());
+    //console.log(this.pipeline());
     next();
 })
 
